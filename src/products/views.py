@@ -1,6 +1,9 @@
+import mimetypes
+
+from django.http import FileResponse, HttpResponseBadRequest
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product
-from .forms import ProductForm
+from .forms import ProductForm, ProductUpdateForm
 
 def product_view(request):
     context = {}
@@ -26,7 +29,7 @@ def product_detail_view(request, handle=None):
     is_owner = request.user.is_authenticated and product.user == request.user
     context = {'product': product, 'is_owner': is_owner}
     if is_owner:
-        form = ProductForm(request.POST or None, instance=product)  
+        form = ProductUpdateForm(request.POST or None, request.FILES or None, instance=product)  
         if request.method == 'POST' and form.is_valid():
             form.save() 
             return redirect('products:detail', handle=product.handle)  
@@ -35,3 +38,6 @@ def product_detail_view(request, handle=None):
         context['form'] = None 
     
     return render(request, 'products/detail.html', context)
+
+
+# def product_attachment_download(request, handle=None):
