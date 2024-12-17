@@ -1,7 +1,11 @@
 .DS_Store
+<<<<<<< HEAD
 local-cdn/
 .env-dev
 .env-prod
+=======
+src/local-cdn/
+>>>>>>> dev-branch
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

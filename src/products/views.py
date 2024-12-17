@@ -1,5 +1,6 @@
 import mimetypes
 
+<<<<<<< HEAD
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render, redirect, get_object_or_404
 from cfehome.storages.utils import generate_presigned_url
@@ -9,6 +10,15 @@ from .models import Product, ProductAttachment
 
 
 def product_create_view(request):
+=======
+from django.http import FileResponse, HttpResponseBadRequest
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Product, ProductAttachment
+from .forms import ProductForm, ProductUpdateForm, ProductAttachmentInLineFormSet
+
+
+def product_view(request):
+>>>>>>> dev-branch
     context = {}
     form = ProductForm(request.POST or None)
     if form.is_valid():
@@ -16,6 +26,7 @@ def product_create_view(request):
         if request.user.is_authenticated:
             obj.user = request.user
             obj.save()
+<<<<<<< HEAD
             return redirect(obj.get_manage_url())
         form.add_error(None, "Your must be logged in to create products.")
     context['form'] = form
@@ -25,6 +36,29 @@ def product_list_view(request):
     object_list = Product.objects.all()
     return render(request, "products/list.html", {"object_list": object_list})
 
+=======
+            return redirect('products/create.html')
+        else:
+            form.add_error(None, 'User is not authenticated')
+
+    context['form'] = form
+    return render(request, 'products/create.html', context)
+
+
+def product_list_view(request):
+    products = Product.objects.all()
+    return render(request, 'products/list.html', {'products': products})
+
+
+def product_detail_view(request, handle=None):
+    product = get_object_or_404(Product, handle=handle)
+    attachment = ProductAttachment.objects.filter(product=product)
+    is_owner = False
+    if request.user.is_authenticated:
+        is_owner = request.user.purchase_set.filter(product=product, completed=True).exists()
+    context = {'product': product, 'is_owner': is_owner, 'attachment': attachment}
+    return render(request, 'products/detail.html', context)
+>>>>>>> dev-branch
 
 
 def product_manage_detail_view(request, handle=None):
@@ -37,7 +71,11 @@ def product_manage_detail_view(request, handle=None):
     if not is_manager:
         return HttpResponseBadRequest()
     form = ProductUpdateForm(request.POST or None, request.FILES or None, instance=obj)
+<<<<<<< HEAD
     formset = ProductAttachmentInlineFormSet(request.POST or None, 
+=======
+    formset = ProductAttachmentInLineFormSet(request.POST or None, 
+>>>>>>> dev-branch
                                              request.FILES or None,queryset=attachments)
     if form.is_valid() and formset.is_valid():
         instance = form.save(commit=False)
@@ -62,6 +100,7 @@ def product_manage_detail_view(request, handle=None):
     context['formset'] = formset
     return render(request, 'products/manager.html', context)
 
+<<<<<<< HEAD
 def product_detail_view(request, handle=None):
     obj = get_object_or_404(Product, handle=handle)
     attachments = ProductAttachment.objects.filter(product=obj)
@@ -87,3 +126,18 @@ def product_attachment_download_view(request, handle=None, pk=None):
     # response['Content-Type'] = content_type or 'application/octet-stream'
     # response['Content-Disposition'] = f'attachment;filename={filename}'
     return HttpResponseRedirect(file_url)
+=======
+def product_attachment_download_view(request, handle=None, pk=None):
+    attachment = get_object_or_404(ProductAttachment, product__handle=handle, pk=pk)
+    can_download = attachment.is_free or False
+    if request.user.is_authenticated:
+        can_download = True
+    if can_download is False:
+        return HttpResponseBadRequest()
+    file = attachment.file.open(mode='rb')
+    filename = attachment.file.name
+    response = FileResponse(file)
+    response['Content-type'] = mimetypes.guess_type(filename)[0]
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    return response
+>>>>>>> dev-branch

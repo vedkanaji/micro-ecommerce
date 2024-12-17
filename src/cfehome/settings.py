@@ -11,7 +11,11 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+<<<<<<< HEAD
 from cfehome.env import config
+=======
+from urllib.parse import urlparse
+>>>>>>> dev-branch
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,7 +45,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+<<<<<<< HEAD
     #internal
+=======
+    
+>>>>>>> dev-branch
     'products',
     'purchases',
 ]
@@ -81,16 +89,31 @@ WSGI_APPLICATION = 'cfehome.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# Add these at the top of your settings.py
+import os
+from os import getenv
+from dotenv import load_dotenv
+
+# Replace the DATABASES section of your settings.py with this
+tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': tmpPostgres.path.replace('/', ''),
+        'USER': tmpPostgres.username,
+        'PASSWORD': tmpPostgres.password,
+        'HOST': tmpPostgres.hostname,
+        'PORT': 5432,
     }
 }
 
+<<<<<<< HEAD
 from .db import * # noqa
 
 
+=======
+>>>>>>> dev-branch
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -126,12 +149,23 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+<<<<<<< HEAD
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR.parent / "local-cdn" / "static"
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR.parent / "local-cdn" / "media"
 PROTECTED_MEDIA_ROOT = BASE_DIR.parent / "local-cdn" / "protected"
 from cfehome.storages.conf import * # noqa
+=======
+STATICFILES_DIRS = [BASE_DIR / "static"]  # Static files for development
+STATIC_ROOT = BASE_DIR / "local-cdn" / "static"  # Static files for production
+
+MEDIA_URL = '/media/'  # URL for accessing media files
+MEDIA_ROOT = BASE_DIR / "local-cdn" / "media"  # Root directory for uploaded media files
+
+PROTECTED_MEDIA_ROOT = BASE_DIR / "local-cdn" / "protected-media"
+
+>>>>>>> dev-branch
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 

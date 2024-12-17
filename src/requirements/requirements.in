@@ -1,5 +1,6 @@
 Django>4.1,<4.2
 psycopg2
+<<<<<<< HEAD
 dj-database-url
 python-decouple
 Pillow
@@ -7,3 +8,7 @@ stripe
 boto3
 django-storages
 gunicorn
+=======
+dotenv
+urlparse
+>>>>>>> dev-branch

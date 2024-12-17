@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # micro-ecommerce
 Learn how to build a Micro eCommerce Web App with Python and Serverless Postgres
 
@@ -95,3 +96,6 @@ rav run vendor_pull
 - `rav run server` maps to `python manage.py runserver` in the `src` folder
 - `rav run watch` triggers tailwind to watch the tailwind input file to make the compiled tailwind output file via `npx tailwindcss -i <input-path> -o <output-path> --watch`
 - `rav run vendor_pull` run this occasionally to pull the latest version of Flowbite, HTMX, and any other third party static vendor files you need.
+=======
+Micro-ecormemrce app with tailwind css, serverless backend and django
+>>>>>>> dev-branch

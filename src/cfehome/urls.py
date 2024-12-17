@@ -17,11 +17,15 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+<<<<<<< HEAD
 from django.views.generic import RedirectView
+=======
+>>>>>>> dev-branch
 
 from . import views
 
 urlpatterns = [
+<<<<<<< HEAD
     path("", views.home_view),
     path("login/", RedirectView.as_view(url="/admin/")),
     path("admin/", admin.site.urls),
@@ -32,3 +36,14 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+=======
+    path('', views.home_view),
+    path('admin/', admin.site.urls),
+    path('products/', include('products.urls')),
+    path('purchases/', include('purchases.urls')),
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+>>>>>>> dev-branch
